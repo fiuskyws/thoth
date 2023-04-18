@@ -31,6 +31,7 @@ func (m *mapDB) Set(key, value string) error {
 	m.m.Store(key, value)
 	return nil
 }
+
 func (m *mapDB) Get(key string) (string, error) {
 	if key == "" {
 		return "", fmt.Errorf(fieldNotSetErr, "key")
