@@ -11,7 +11,7 @@ type (
 	}
 )
 
-func NewMapDB() API {
+func NewMapStorage() API {
 	return &mapDB{}
 }
 

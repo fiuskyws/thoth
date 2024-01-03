@@ -23,7 +23,7 @@ func (m *Manager) CreateTable(name string) error {
 		return fmt.Errorf("database '%s' already exists", name)
 	}
 
-	m.dbs[name] = storage.NewMapDB()
+	m.dbs[name] = storage.NewMapStorage()
 
 	return nil
 }
