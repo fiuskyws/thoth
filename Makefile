@@ -13,6 +13,6 @@ run:
 	@go run $(main)
 
 proto:
-#	protoc --go_out=./src/ \
-#    --go-grpc_out=./src/ \
-#    .proto/pegasus.proto
+	@protoc --go_out=./src/ \
+		--go-grpc_out=./src/ \
+		.proto/thoth.proto
