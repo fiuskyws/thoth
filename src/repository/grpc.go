@@ -5,6 +5,8 @@ import (
 
 	"github.com/fiuskyws/thoth/src/manager"
 	"github.com/fiuskyws/thoth/src/proto"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type GRPCRepo struct {
@@ -17,22 +19,42 @@ func NewGRPCRepo(mgr *manager.Manager) *GRPCRepo {
 		mgr: mgr,
 	}
 }
-func (g *GRPCRepo) CreateTable(context.Context, *proto.CreateTableRequest) (*proto.CreateTableResponse, error) {
+func (g *GRPCRepo) CreateTable(_ context.Context, req *proto.CreateTableRequest) (*proto.CreateTableResponse, error) {
+	if err := g.mgr.CreateTable(req.Name); err != nil {
+		return nil, status.Error(codes.Canceled, err.Error())
+	}
 	return nil, nil
 }
 
-func (g *GRPCRepo) Delete(context.Context, *proto.DeleteRequest) (*proto.DeleteResponse, error) {
+func (g *GRPCRepo) GetTables(_ context.Context, _ *proto.GetTablesRequest) (*proto.GetTablesResponse, error) {
+	tables := g.mgr.GetTables()
+	return &proto.GetTablesResponse{
+		Tables: tables,
+	}, nil
+}
+
+func (g *GRPCRepo) Get(_ context.Context, req *proto.GetRequest) (*proto.GetResponse, error) {
+	val, err := g.mgr.Get(req.Table, req.Key)
+	if err != nil {
+		return nil, status.Error(codes.Canceled, err.Error())
+	}
+	return &proto.GetResponse{
+		Value: val,
+	}, nil
+}
+
+func (g *GRPCRepo) Set(_ context.Context, req *proto.SetRequest) (*proto.SetResponse, error) {
+	err := g.mgr.Set(req.Table, req.Key, req.Value)
+	if err != nil {
+		return nil, status.Error(codes.Canceled, err.Error())
+	}
 	return nil, nil
 }
 
-func (g *GRPCRepo) Get(context.Context, *proto.GetRequest) (*proto.GetResponse, error) {
-	return nil, nil
-}
-
-func (g *GRPCRepo) GetTables(context.Context, *proto.GetTablesRequest) (*proto.GetTablesResponse, error) {
-	return nil, nil
-}
-
-func (g *GRPCRepo) Set(context.Context, *proto.SetRequest) (*proto.SetResponse, error) {
+func (g *GRPCRepo) Delete(_ context.Context, req *proto.DeleteRequest) (*proto.DeleteResponse, error) {
+	err := g.mgr.Delete(req.Table, req.Key)
+	if err != nil {
+		return nil, status.Error(codes.Canceled, err.Error())
+	}
 	return nil, nil
 }
