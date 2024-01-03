@@ -20,11 +20,12 @@ type (
 		repo     *repository.GRPCRepo
 		srv      *grpc.Server
 		opts     []grpc.ServerOption
+		port     uint
 	}
 )
 
 // NewGRPC returns a new GRPC connector.
-func NewGRPC(mgr *manager.Manager) *GRPC {
+func NewGRPC(mgr *manager.Manager, port uint) API {
 	var opts []grpc.ServerOption
 
 	srv := grpc.NewServer(opts...)
@@ -36,13 +37,14 @@ func NewGRPC(mgr *manager.Manager) *GRPC {
 		opts: opts,
 		repo: repo,
 		srv:  srv,
+		port: port,
 	}
 }
 
 // Start - starts the gRPC server.
-func (g *GRPC) Start(port uint) error {
+func (g *GRPC) Start() error {
 	var err error
-	g.listener, err = net.Listen("tcp", fmt.Sprintf("127.0.0.1:%d", port))
+	g.listener, err = net.Listen("tcp", fmt.Sprintf("127.0.0.1:%d", g.port))
 	if err != nil {
 		zap.L().Error(err.Error())
 		return err
