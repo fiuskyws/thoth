@@ -5,6 +5,8 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/fiuskyws/thoth/src/manager"
+	"github.com/fiuskyws/thoth/src/server"
 	"go.uber.org/zap"
 )
 
@@ -27,5 +29,18 @@ func main() {
 
 	signal.Notify(exit, syscall.SIGTERM, syscall.SIGINT)
 
+	m := manager.NewManager()
+	g := server.NewGRPC(m, 8090)
+
+	go func() {
+		if err := g.Start(); err != nil {
+			zap.L().Panic(err.Error())
+		}
+	}()
+
 	<-exit
+
+	if err := g.Close(); err != nil {
+		zap.L().Panic(err.Error())
+	}
 }

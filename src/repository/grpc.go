@@ -23,7 +23,7 @@ func (g *GRPCRepo) CreateTable(_ context.Context, req *proto.CreateTableRequest)
 	if err := g.mgr.CreateTable(req.Name); err != nil {
 		return nil, status.Error(codes.Canceled, err.Error())
 	}
-	return nil, nil
+	return &proto.CreateTableResponse{}, nil
 }
 
 func (g *GRPCRepo) GetTables(_ context.Context, _ *proto.GetTablesRequest) (*proto.GetTablesResponse, error) {
@@ -48,7 +48,7 @@ func (g *GRPCRepo) Set(_ context.Context, req *proto.SetRequest) (*proto.SetResp
 	if err != nil {
 		return nil, status.Error(codes.Canceled, err.Error())
 	}
-	return nil, nil
+	return &proto.SetResponse{}, nil
 }
 
 func (g *GRPCRepo) Delete(_ context.Context, req *proto.DeleteRequest) (*proto.DeleteResponse, error) {
@@ -56,5 +56,5 @@ func (g *GRPCRepo) Delete(_ context.Context, req *proto.DeleteRequest) (*proto.D
 	if err != nil {
 		return nil, status.Error(codes.Canceled, err.Error())
 	}
-	return nil, nil
+	return &proto.DeleteResponse{}, nil
 }
