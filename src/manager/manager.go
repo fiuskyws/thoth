@@ -8,40 +8,40 @@ import (
 
 type (
 	Manager struct {
-		dbs map[string]storage.API
+		tables map[string]storage.API
 	}
 )
 
 func NewManager() *Manager {
 	return &Manager{
-		dbs: map[string]storage.API{},
+		tables: map[string]storage.API{},
 	}
 }
 
 func (m *Manager) CreateTable(name string) error {
-	if _, ok := m.dbs[name]; ok {
+	if _, ok := m.tables[name]; ok {
 		return fmt.Errorf("database '%s' already exists", name)
 	}
 
-	m.dbs[name] = storage.NewMapStorage()
+	m.tables[name] = storage.NewMapStorage()
 
 	return nil
 }
 
-func (m *Manager) Set(dbName, key, value string) error {
-	db, ok := m.dbs[dbName]
+func (m *Manager) Set(tableName, key, value string) error {
+	table, ok := m.tables[tableName]
 	if !ok {
-		return fmt.Errorf("database '%s' does not exists", dbName)
+		return fmt.Errorf("database '%s' does not exists", tableName)
 	}
 
-	return db.Set(key, value)
+	return table.Set(key, value)
 }
 
-func (m *Manager) Get(dbName, key string) (string, error) {
-	db, ok := m.dbs[dbName]
+func (m *Manager) Get(tableName, key string) (string, error) {
+	table, ok := m.tables[tableName]
 	if !ok {
-		return "", fmt.Errorf("database '%s' does not exists", dbName)
+		return "", fmt.Errorf("database '%s' does not exists", tableName)
 	}
 
-	return db.Get(key)
+	return table.Get(key)
 }
