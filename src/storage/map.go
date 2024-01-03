@@ -47,3 +47,11 @@ func (m *mapDB) Get(key string) (string, error) {
 
 	return str, nil
 }
+
+func (m *mapDB) Delete(key string) error {
+	if _, err := m.Get(key); err != nil {
+		return err
+	}
+	m.m.Delete(key)
+	return nil
+}

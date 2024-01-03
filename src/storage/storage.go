@@ -7,5 +7,7 @@ type (
 		Set(key, value string) error
 		// Get retrieves data
 		Get(key string) (string, error)
+		// Delete removes data
+		Delete(key string) error
 	}
 )
