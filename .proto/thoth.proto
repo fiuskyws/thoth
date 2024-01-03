@@ -22,12 +22,12 @@ message GetTablesResponse {
   repeated string tables = 1;
 }
 
-message SendRequest {
+message SetRequest {
   string table = 1;
   string key = 2;
-  string value = 2;
+  string value = 3;
 }
-message SendResponse {}
+message SetResponse {}
 
 message GetRequest {
   string table = 1;
