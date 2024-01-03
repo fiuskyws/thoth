@@ -28,6 +28,16 @@ func (m *Manager) CreateTable(name string) error {
 	return nil
 }
 
+func (m *Manager) GetTables() []string {
+	tables := []string{}
+
+	for k := range m.tables {
+		tables = append(tables, k)
+	}
+
+	return tables
+}
+
 func (m *Manager) Set(tableName, key, value string) error {
 	table, ok := m.tables[tableName]
 	if !ok {
@@ -44,4 +54,13 @@ func (m *Manager) Get(tableName, key string) (string, error) {
 	}
 
 	return table.Get(key)
+}
+
+func (m *Manager) Delete(tableName, key string) error {
+	table, ok := m.tables[tableName]
+	if !ok {
+		return fmt.Errorf("database '%s' does not exists", tableName)
+	}
+
+	return table.Delete(key)
 }
