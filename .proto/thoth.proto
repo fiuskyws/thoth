@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package proto;
+option go_package = "/proto";
+
+service Thoth {
+  rpc CreateTable(CreateTableRequest) returns (CreateTableResponse);
+  rpc GetTables(GetTablesRequest) returns (GetTablesResponse);
+
+  rpc Set(SetRequest) returns (SetResponse);
+  rpc Get(GetRequest) returns (GetResponse);
+  rpc Delete(DeleteRequest) returns (DeleteResponse);
+}
+
+message CreateTableRequest {
+  string name = 1;
+}
+message CreateTableResponse {}
+
+message GetTablesRequest {}
+message GetTablesResponse {
+  repeated string tables = 1;
+}
+
+message SetRequest {
+  string table = 1;
+  string key = 2;
+  string value = 3;
+}
+message SetResponse {}
+
+message GetRequest {
+  string table = 1;
+  string key = 2;
+}
+message GetResponse {
+  string value = 1;
+}
+
+message DeleteRequest {
+  string table = 1;
+  string key = 2;
+}
+message DeleteResponse {}
